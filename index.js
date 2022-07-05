@@ -13,7 +13,15 @@ app.use(express.json());
 // CONNECT TO MONGO DB
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ndcgl.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-console.log('MongoDB connected')
+console.log('MongoDB connected');
+
+async function run() {
+    try { 
+        
+    }
+    finally { }
+};
+run().catch(console.dir)
 
 
 
