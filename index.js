@@ -17,6 +17,9 @@ console.log('MongoDB connected');
 
 async function run() {
     try { 
+        await client.connect();
+
+        const prayerCollection = client.db('mashjidDB').collection('prayerTime');
         
     }
     finally { }

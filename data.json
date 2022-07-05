@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Fazar",
+        "azan-time": 8.30,
+        "ekamot-time": 5.10
+    },
+    {
+        "name": "Johor",
+        "azan-time": 1.30,
+        "ekamot-time": 1.30
+    },
+    {
+        "name": "Asor",
+        "azan-time": 4.45,
+        "ekamot-time": 5.00
+    },
+    {
+        "name": "Magrib",
+        "azan-time": 6.10,
+        "ekamot-time": 6.13
+    },
+    {
+        "name": "Esha",
+        "azan-time": 7.45,
+        "ekamot-time": 8.00
+    },
+    {
+        "name": "Jumah",
+        "azan-time": 12.30,
+        "ekamot-time": 1.30
+    }
+]
