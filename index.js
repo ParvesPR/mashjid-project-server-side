@@ -20,6 +20,7 @@ async function run() {
         await client.connect();
 
         const prayerCollection = client.db('mashjidDB').collection('prayerTime');
+        const blogsCollection = client.db('mashjidDB').collection('blogs');
 
         // GET ALL DATA
         app.get('/prayerTime', async (req, res) => {
@@ -27,7 +28,14 @@ async function run() {
             const cursor = prayerCollection.find(query);
             const result = await cursor.toArray();
             res.send(result);
-        })
+        });
+
+        // CREATE A NEW POST
+        app.post('/blogs', async (req, res) => {
+            const newBlog = req.body;
+            const result = await blogsCollection.insertOne(newBlog);
+            res.send(result);
+        });
     }
     finally { }
 };
