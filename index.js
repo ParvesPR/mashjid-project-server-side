@@ -16,11 +16,18 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 console.log('MongoDB connected');
 
 async function run() {
-    try { 
+    try {
         await client.connect();
 
         const prayerCollection = client.db('mashjidDB').collection('prayerTime');
-        
+
+        // GET ALL DATA
+        app.get('/prayerTime', async (req, res) => {
+            const query = {};
+            const cursor = prayerCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
     }
     finally { }
 };
