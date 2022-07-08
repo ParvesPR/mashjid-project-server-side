@@ -36,6 +36,8 @@ async function run() {
             const result = await blogsCollection.insertOne(newBlog);
             res.send(result);
         });
+
+        // POST A NEW NOTICE
     }
     finally { }
 };
