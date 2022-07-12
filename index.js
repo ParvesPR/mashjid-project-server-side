@@ -21,6 +21,7 @@ async function run() {
 
         const prayerCollection = client.db('mashjidDB').collection('prayerTime');
         const blogsCollection = client.db('mashjidDB').collection('blogs');
+        const noticeCollection = client.db('mashjidDB').collection('notice');
 
         // GET ALL DATA
         app.get('/prayerTime', async (req, res) => {
@@ -38,6 +39,11 @@ async function run() {
         });
 
         // POST A NEW NOTICE
+        app.post('/notice', async (req, res) => {
+            const newNotice = req.body;
+            const result = await noticeCollection.insertOne(newNotice);
+            res.send(result);
+        });
     }
     finally { }
 };
