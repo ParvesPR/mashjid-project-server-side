@@ -60,6 +60,14 @@ async function run() {
             const result = await noticeCollection.insertOne(newNotice);
             res.send(result);
         });
+
+        // GET ALL NOTICE
+        app.get('/notice', async (req, res) => {
+            const query = {};
+            const cursor = noticeCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
     }
     finally { }
 };
