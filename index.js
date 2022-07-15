@@ -36,6 +36,7 @@ async function run() {
         await client.connect();
 
         const prayerCollection = client.db('mashjidDB').collection('prayerTime');
+        const userCollection = client.db('mashjidDB').collection('users');
         const blogsCollection = client.db('mashjidDB').collection('blogs');
         const noticeCollection = client.db('mashjidDB').collection('notice');
 
@@ -46,6 +47,22 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         });
+
+        // SAVE USER DATA
+        app.put('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            const user = req.body;
+            const filter = { email: email };
+            const option = { upsert: true };
+            const updateDoc = {
+                $set: user,
+            };
+            const result = await userCollection.updateOne(filter, updateDoc, option);
+            const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, {
+                expiresIn: '1d'
+            })
+            res.send({ result, token });
+        })
 
         // CREATE A NEW POST
         app.post('/blogs', async (req, res) => {
