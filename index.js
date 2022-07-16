@@ -6,6 +6,7 @@ const app = express();
 const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
+
 // MIDDLEWARE
 app.use(cors());
 app.use(express.json());
@@ -20,15 +21,14 @@ function verifyJwt(req, res, next) {
     if (!authHeader) {
         return res.status(401).send({ message: 'Unauthorized access' })
     }
-    const token = authHeader.spilt(' ')[1];
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decode) {
+    const token = authHeader.split(' ')[1];
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
         if (err) {
             return res.status(403).send({ message: 'Forbidden access' })
         }
         req.decoded = decoded;
         next();
-    }
-    )
+    });
 }
 
 async function run() {
@@ -58,10 +58,16 @@ async function run() {
                 $set: user,
             };
             const result = await userCollection.updateOne(filter, updateDoc, option);
-            const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, {
-                expiresIn: '1d'
-            })
+            const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10h' })
             res.send({ result, token });
+        });
+
+        //  GET ALL USERS DATA
+        app.get('/users', verifyJwt, async (req, res) => {
+            const query = {};
+            const cursor = userCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
         })
 
         // CREATE A NEW POST
@@ -79,7 +85,7 @@ async function run() {
         });
 
         // GET ALL NOTICE
-        app.get('/notice', async (req, res) => {
+        app.get('/notice',verifyJwt, async (req, res) => {
             const query = {};
             const cursor = noticeCollection.find(query);
             const result = await cursor.toArray();
