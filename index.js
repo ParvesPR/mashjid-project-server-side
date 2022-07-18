@@ -68,6 +68,14 @@ async function run() {
             const cursor = userCollection.find(query);
             const result = await cursor.toArray();
             res.send(result);
+        });
+
+        // DELETE A USER
+        app.delete('/user/:email', verifyJwt, async (req, res) => {
+            const user = req.params.email;
+            const filter = { email: email };
+            const result = await userCollection.deleteOne(filter);
+            res.send(result);
         })
 
         // CREATE A NEW POST
@@ -85,7 +93,7 @@ async function run() {
         });
 
         // GET ALL NOTICE
-        app.get('/notice',verifyJwt, async (req, res) => {
+        app.get('/notice', verifyJwt, async (req, res) => {
             const query = {};
             const cursor = noticeCollection.find(query);
             const result = await cursor.toArray();
