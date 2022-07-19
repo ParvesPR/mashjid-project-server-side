@@ -58,25 +58,28 @@ async function run() {
                 $set: user,
             };
             const result = await userCollection.updateOne(filter, updateDoc, option);
-            const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10h' })
+            const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
             res.send({ result, token });
         });
 
         //  GET ALL USERS DATA
-        app.get('/users', verifyJwt, async (req, res) => {
+        app.get('/user', verifyJwt, async (req, res) => {
             const query = {};
             const cursor = userCollection.find(query);
             const result = await cursor.toArray();
             res.send(result);
         });
 
-        // DELETE A USER
-        app.delete('/user/:email', verifyJwt, async (req, res) => {
-            const user = req.params.email;
+        // MAKE USER AN ADMIN
+        app.put('/user/admin/:email', verifyJwt, async (req, res) => {
+            const email = req.params.email;
             const filter = { email: email };
-            const result = await userCollection.deleteOne(filter);
+            const updateDoc = {
+                $set: { role: 'admin' }
+            };
+            const result = await userCollection.updateOne(filter, updateDoc);
             res.send(result);
-        })
+        });
 
         // CREATE A NEW POST
         app.post('/blogs', async (req, res) => {
