@@ -93,6 +93,14 @@ async function run() {
             res.send(result);
         });
 
+        // FIND ADMIN USER
+        app.get('/admin/:email', verifyJwt, verifyAdmin, async (req, res) => {
+            const email = req.params.email;
+            const user = await userCollection.findOne({ email: email });
+            const isAdmin = user.role === 'admin';
+            res.send({ admin: isAdmin });
+        });
+
         // CREATE A NEW POST
         app.post('/blogs', async (req, res) => {
             const newBlog = req.body;
