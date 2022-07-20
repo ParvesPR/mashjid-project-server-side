@@ -40,6 +40,18 @@ async function run() {
         const blogsCollection = client.db('mashjidDB').collection('blogs');
         const noticeCollection = client.db('mashjidDB').collection('notice');
 
+        // PROTECT ADMIN URL
+        const verifyAdmin = async (req, res, next) => {
+            const requester = req.decoded.email;
+            const requesterAccount = await userCollection.findOne({ email: requester });
+            if (requesterAccount.role === 'admin') {
+                next();
+            }
+            else {
+                res.status(403).send({ message: 'forbidden' })
+            }
+        };
+
         // GET ALL DATA
         app.get('/prayerTime', async (req, res) => {
             const query = {};
