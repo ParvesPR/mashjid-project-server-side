@@ -74,8 +74,16 @@ async function run() {
             res.send({ result, token });
         });
 
-        //  GET ALL USERS DATA
-        app.get('/user', verifyJwt, async (req, res) => {
+        //  GET ALL USERS DATA (DASHBOARD)
+        app.get('/user', verifyJwt, verifyAdmin, async (req, res) => {
+            const query = {};
+            const cursor = userCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        });
+
+        //  GET ALL USERS DATA (NAVBAR)
+        app.get('/users', verifyJwt, async (req, res) => {
             const query = {};
             const cursor = userCollection.find(query);
             const result = await cursor.toArray();
@@ -108,11 +116,11 @@ async function run() {
             res.send(result);
         });
 
-        // POST A NEW NOTICE
-        app.post('/notice', async (req, res) => {
-            const newNotice = req.body;
-            const result = await noticeCollection.insertOne(newNotice);
-            res.send(result);
+        // ADD A NEW NOTICE
+        app.post('/addNotice', verifyJwt,verifyAdmin, async (req, res) => {
+            const notice = req.body;
+            const result = await noticeCollection.insertOne(notice);
+            res.send(result)
         });
 
         // GET ALL NOTICE
