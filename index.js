@@ -4,7 +4,7 @@ const port = process.env.PORT || 5000;
 require('dotenv').config();
 const app = express();
 const jwt = require('jsonwebtoken');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 // MIDDLEWARE
@@ -117,11 +117,19 @@ async function run() {
         });
 
         // ADD A NEW NOTICE
-        app.post('/addNotice', verifyJwt,verifyAdmin, async (req, res) => {
+        app.post('/addNotice', verifyJwt, verifyAdmin, async (req, res) => {
             const notice = req.body;
             const result = await noticeCollection.insertOne(notice);
             res.send(result)
         });
+
+        // DELETE A NOTICE
+        app.delete('/notice/:id', verifyJwt, verifyAdmin, async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await noticeCollection.deleteOne(query);
+            res.send(result);
+        })
 
         // GET ALL NOTICE
         app.get('/notice', verifyJwt, async (req, res) => {
