@@ -109,8 +109,8 @@ async function run() {
             res.send({ admin: isAdmin });
         });
 
-        // CREATE A NEW POST
-        app.post('/blogs', async (req, res) => {
+        // POST A NEW BLOG
+        app.post('/blogs', verifyJwt, verifyAdmin, async (req, res) => {
             const newBlog = req.body;
             const result = await blogsCollection.insertOne(newBlog);
             res.send(result);
@@ -126,6 +126,7 @@ async function run() {
         // DELETE A NOTICE
         app.delete('/notice/:id', verifyJwt, verifyAdmin, async (req, res) => {
             const id = req.params.id;
+            console.log(id)
             const query = { _id: ObjectId(id) };
             const result = await noticeCollection.deleteOne(query);
             res.send(result);
