@@ -116,6 +116,14 @@ async function run() {
             res.send(result);
         });
 
+        // LOAD ALL BLOGS
+        app.get('/blogs', verifyJwt, async (req, res) => {
+            const query = {};
+            const cursor = blogsCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
         // ADD A NEW NOTICE
         app.post('/addNotice', verifyJwt, verifyAdmin, async (req, res) => {
             const notice = req.body;
