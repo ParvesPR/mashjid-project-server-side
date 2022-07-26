@@ -117,10 +117,18 @@ async function run() {
         });
 
         // LOAD ALL BLOGS
-        app.get('/blogs', verifyJwt, async (req, res) => {
+        app.get('/blogs', async (req, res) => {
             const query = {};
             const cursor = blogsCollection.find(query);
             const result = await cursor.toArray();
+            res.send(result);
+        });
+
+        // DELETE A BLOG
+        app.delete('/blogs', verifyJwt, verifyAdmin, async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await blogsCollection.deleteOne(query);
             res.send(result);
         })
 
