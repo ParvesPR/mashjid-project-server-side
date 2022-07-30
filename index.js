@@ -39,6 +39,7 @@ async function run() {
         const userCollection = client.db('mashjidDB').collection('users');
         const blogsCollection = client.db('mashjidDB').collection('blogs');
         const noticeCollection = client.db('mashjidDB').collection('notice');
+        const committeeCollection = client.db('mashjidDB').collection('committee');
 
         // PROTECT ADMIN URL
         const verifyAdmin = async (req, res, next) => {
@@ -125,8 +126,9 @@ async function run() {
         });
 
         // DELETE A BLOG
-        app.delete('/blogs', verifyJwt, verifyAdmin, async (req, res) => {
+        app.delete('/blogs/:id', verifyJwt, verifyAdmin, async (req, res) => {
             const id = req.params.id;
+            console.log(id)
             const query = { _id: ObjectId(id) };
             const result = await blogsCollection.deleteOne(query);
             res.send(result);
@@ -154,7 +156,14 @@ async function run() {
             const cursor = noticeCollection.find(query);
             const result = await cursor.toArray();
             res.send(result)
-        })
+        });
+
+        // ADD A COMMITTEE
+        app.post('/addCommittee', verifyJwt, verifyAdmin, async (req, res) => {
+            const committee = req.body;
+            const result = await committeeCollection.insertOne(committee);
+            res.send(result)
+        });
     }
     finally { }
 };
