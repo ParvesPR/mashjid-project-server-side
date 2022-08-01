@@ -159,7 +159,7 @@ async function run() {
         });
 
         // ADD A COMMITTEE
-        app.put('/committee', verifyJwt, verifyAdmin, async (req, res) => {
+        app.post('/committee', verifyJwt, verifyAdmin, async (req, res) => {
             const committee = req.body;
             const result = await committeeCollection.insertOne(committee);
             res.send(result)
@@ -170,6 +170,14 @@ async function run() {
             const query = {};
             const cursor = committeeCollection.find(query);
             const result = await cursor.toArray();
+            res.send(result);
+        });
+
+        // DELETE A COMMITTEE PROFILE
+        app.delete('/committee', verifyJwt, verifyAdmin, async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await committeeCollection.deleteOne(query);
             res.send(result);
         });
     }
