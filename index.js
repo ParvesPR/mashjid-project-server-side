@@ -174,12 +174,12 @@ async function run() {
         });
 
         // DELETE A COMMITTEE PROFILE
-        app.delete('/committee', verifyJwt, verifyAdmin, async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const result = await committeeCollection.deleteOne(query);
-            res.send(result);
-        });
+        app.delete('/committee/:id', async (req, res) => {
+                const id = req.params.id;
+                const query = { _id: ObjectId(id) };
+                const result = await committeeCollection.deleteOne(query);
+                res.send(result);
+            });
     }
     finally { }
 };
