@@ -175,11 +175,19 @@ async function run() {
 
         // DELETE A COMMITTEE PROFILE
         app.delete('/committee/:id', async (req, res) => {
-                const id = req.params.id;
-                const query = { _id: ObjectId(id) };
-                const result = await committeeCollection.deleteOne(query);
-                res.send(result);
-            });
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await committeeCollection.deleteOne(query);
+            res.send(result);
+        });
+
+        // GET ALL PRAYERS TIMES
+        app.get('/prayerTime', async(req, res) => {
+            const query = {};
+            const cursor = prayerCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        });
     }
     finally { }
 };
