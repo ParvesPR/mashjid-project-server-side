@@ -36,6 +36,7 @@ async function run() {
         await client.connect();
 
         const prayerCollection = client.db('mashjidDB').collection('prayerTime');
+        const prayerTimeCollection = client.db('mashjidDB').collection('setTime');
         const userCollection = client.db('mashjidDB').collection('users');
         const blogsCollection = client.db('mashjidDB').collection('blogs');
         const noticeCollection = client.db('mashjidDB').collection('notice');
@@ -182,12 +183,21 @@ async function run() {
         });
 
         // GET ALL PRAYERS TIMES
-        app.get('/prayerTime', async(req, res) => {
+        app.get('/prayerTime', async (req, res) => {
             const query = {};
             const cursor = prayerCollection.find(query);
             const result = await cursor.toArray();
             res.send(result);
         });
+
+        // PUT PRAYER NEW TIME TABLE
+        app.put('/prayerTime/:id', verifyJwt, verifyAdmin, async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await prayerTimeCollection.insertOne(query);
+            res.send(result);
+        });
+
     }
     finally { }
 };
