@@ -185,24 +185,33 @@ async function run() {
         // GET ALL PRAYERS TIMES
         app.get('/prayerTime', async (req, res) => {
             const query = {};
-            const cursor = prayerTimeCollection.find(query);
+            const cursor = prayerCollection.find(query);
             const result = await cursor.toArray();
             res.send(result);
         });
 
+        // GET A SINGLE TIME VIA ID
+        app.get('/prayerTime/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const prayerTime = await prayerCollection.findOne(query);
+            res.send(prayerTime)
+        })
+
         // PUT PRAYER NEW TIME TABLE
         app.put('/prayerTime/:id', async (req, res) => {
             const id = req.params.id;
-            console.log(id);
+            console.log(id)
             const currentTime = req.body;
             console.log(currentTime);
             const filter = { _id: ObjectId(id) }
+            const options = { upsert: true };
             const updateDoc = {
                 $set: {
                     currentTime
                 }
             };
-            const newTime = await prayerCollection.updateOne(filter, updateDoc)
+            const newTime = await prayerCollection.updateOne(filter, updateDoc, options)
             res.send(newTime);
         });
 
