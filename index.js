@@ -41,6 +41,7 @@ async function run() {
         const blogsCollection = client.db('mashjidDB').collection('blogs');
         const noticeCollection = client.db('mashjidDB').collection('notice');
         const committeeCollection = client.db('mashjidDB').collection('committee');
+        const sliderCollection = client.db('mashjidDB').collection('slider');
 
         // PROTECT ADMIN URL
         const verifyAdmin = async (req, res, next) => {
@@ -180,6 +181,13 @@ async function run() {
             const query = { _id: ObjectId(id) };
             const result = await committeeCollection.deleteOne(query);
             res.send(result);
+        });
+
+        // ADD A SLIDER
+        app.post('/slider', verifyJwt, verifyAdmin, async (req, res) => {
+            const slider = req.body;
+            const result = await sliderCollection.insertOne(slider);
+            res.send(result)
         });
 
         // GET ALL PRAYERS TIMES
