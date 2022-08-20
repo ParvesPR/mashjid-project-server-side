@@ -190,6 +190,14 @@ async function run() {
             res.send(result)
         });
 
+        // GET SLIDER DATA
+        app.get('/slider', async (req, res) => {
+            const query = {};
+            const cursor = sliderCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
         // GET ALL PRAYERS TIMES
         app.get('/prayerTime', async (req, res) => {
             const query = {};
